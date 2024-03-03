@@ -2,41 +2,42 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import MessageProvider, { MessagesContext } from '@/contexts/messages.context';
 
 import styles from './chat.module.scss';
+import MessageBubble from './message-bubble.component';
 
 const ChatBody: FC = () => {
-  const { messageFlow, messages, addMessage } = useContext(MessagesContext);
+  const { systemMessages, messages, endChat, addMessage } = useContext(MessagesContext);
+  const startMessage = systemMessages[100];
 
-  const startMessage = messageFlow[100];
+  const handleButtonClick = (option: { text: string, nextId: number | false }) => {
+    if (option.nextId !== false) {
+      const nextSysMessage = systemMessages[option.nextId];
 
-  const handleButtonClick = (nextId: number | false) => {
-    if (nextId !== false) {
-      const nextMessage = messages.find(message => message.id === nextId);
-
-      if (nextMessage) {
-        addMessage(nextMessage.text, nextMessage.id);
-      } else {
-        addMessage("End of chat", false);
+      if (nextSysMessage) {
+        addMessage({
+          id: messages.length + 1, // Generate unique message ID
+          text: option.text,
+          isUser: true,
+          nextId: option.nextId,
+          uiType: 'button',
+          valueType: 'text',
+          valueOptions: [],
+        });
+        addMessage(nextSysMessage);
       }
     } else {
-      addMessage("End of chat", false);
+      endChat(true);
     }
   };
 
   return (
     <div className={styles.chatBody}>
-      <div key={startMessage.id}>
-        <p>{startMessage.text}</p>
-        {/* Render buttons if uiType is 'button' */}
-        {startMessage.uiType === 'button' && (
-          <div>
-            {startMessage.valueOptions.map(option => (
-              <button key={option.text} onClick={() => handleButtonClick(option.nextId)}>
-                {option.text}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      {startMessage && (
+        <MessageBubble message={startMessage} onButtonClick={handleButtonClick} showOptions={messages.length < 1 ? true : false} />
+      )}
+      
+      {messages.map((message) => (
+        <MessageBubble key={message.id} message={message} onButtonClick={handleButtonClick} showOptions={messages.indexOf(message) === messages.length - 1} />
+      ))}
     </div>
   );
 };

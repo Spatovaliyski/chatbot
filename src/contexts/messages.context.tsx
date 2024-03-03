@@ -2,67 +2,60 @@ import apiService from '@/services/service';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 // Define the message structure interface
-interface Message {
+export interface Message {
   id: number;
   text: string;
   isUser: boolean;
+  nextId: number | false;
   uiType: string;
   valueType: string;
-  valueOptions: ValueOption[];
-}
-
-// Define the value option structure interface
-interface ValueOption {
-  nextId: number | false;
-  value: boolean | string | number;
-  text: string;
+  valueOptions: [];
 }
 
 // Define the context interface
 interface MessagesContextProps {
-  messageFlow: Message[],
+  systemMessages: Message[],
   messages: Message[];
-  addMessage: (value: boolean | string | number, nextId: number | false) => void;
+  addMessage: (message: Message) => void;
+  endChat: (isComplete: boolean) => void;
   loading: boolean;
 }
 
 // Create the context
 export const MessagesContext = createContext<MessagesContextProps>({
-  messageFlow: [],
+  systemMessages: [],
   messages: [],
-  addMessage: () => {},
+  addMessage: () => { },
+  endChat: () => { },
   loading: false,
 });
 
 // Create the provider component
 const MessageProvider = ({ children }: any) => {
-  const [messageFlow, setMessageFlow] = useState([]);
+  const [systemMessages, setSystemMessages] = useState<Message[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const addMessage = (value: boolean | string | number, nextId: number | false) => {
-    const currentMessage = messages.find(message => message.id === nextId);
-
-    if (currentMessage && nextId !== false) {
-      setMessages([...messages, currentMessage]);
-    }
-
-    // Add the selected value to the state
-    setMessages([
-      ...messages,
-      {
-        id: messages.length + 1,
-        isUser: true,
-        text: `Selected value: ${value}`,
-        uiType: 'button',
-        valueType: typeof value === 'boolean' ? 'boolean' : typeof value === 'number' ? 'number' : 'string', // Example value type
-        valueOptions: [], 
-      }
-    ]);
+  const addMessage = (message: Message, isUser: boolean = false) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
   };
 
+  const wrapConversation = (messages: any) => {
+    messages.forEach((message: Message) => {
+      if (!message.isUser) {
+        setConversation((prevConversation) => [...prevConversation, message]);
+      }
+    });
+  }
+
+  const endChat = (isComplete: boolean) => {
+    if (isComplete) {
+      wrapConversation(messages);
+    }
+  }
+
   useEffect(() => {
-    // Simulate API call to get chat default messages
     const fetchChatDefaultMessages = async () => {
       setLoading(true);
       try {
@@ -71,7 +64,9 @@ const MessageProvider = ({ children }: any) => {
           acc[message.id] = message;
           return acc;
         }, {});
-        setMessageFlow(formattedMessages);
+
+        setSystemMessages(formattedMessages);
+
       } catch (error) {
         console.error('Error fetching chat default messages:', error);
       } finally {
@@ -84,9 +79,10 @@ const MessageProvider = ({ children }: any) => {
   }, []);
 
   const value: MessagesContextProps = {
-    messageFlow,
+    systemMessages,
     messages,
     addMessage,
+    endChat,
     loading,
   };
 
