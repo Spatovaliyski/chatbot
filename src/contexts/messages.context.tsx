@@ -20,6 +20,7 @@ const MessageProvider = ({ children }: any) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [choices, setChoices] = useState<Choice[]>([]);
   const [loading, setLoading] = useState(false);
+  const [conversation, setConversation] = useState(false);
 
   const addMessage = (message: Message, isUser: boolean = false) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -30,19 +31,24 @@ const MessageProvider = ({ children }: any) => {
   }
 
   const endConversation = () => {
-    console.log('Choices:', choices);
-    console.log('Messages:', messages);
-    
-    // apiService
-    //   .postConversation(conversation)
-    //   .then((response) => {
-    //     console.log('Conversation posted:', response);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error posting conversation:', error);
-    //   });
-    
+    setConversation(true);
   }
+
+  useEffect(() => {
+    if (conversation) {
+      console.log(choices);
+      console.log('Conversation ended:', conversation);
+
+      apiService
+        .postConversation(choices)
+        .then((response) => {
+          console.log('Conversation posted:', response);
+        })
+        .catch((error) => {
+          console.error('Error posting conversation:', error);
+        });
+    }
+  }, [conversation]);
 
   useEffect(() => {
     const fetchChatDefaultMessages = async () => {

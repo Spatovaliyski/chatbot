@@ -42,7 +42,9 @@ const ChatBody: FC = () => {
    * 
    * @returns {void}
   */
-  const handleButtonClick = (option: { value: string, text: string, nextId: number | false }, choiceName: string) => {
+  const handleButtonClick = (option: { value: string, text: string, nextId: number }, choiceName: string) => {
+    const nextSysMessage = systemMessages[option.nextId];
+
     addChoice({
       value: choiceName,
       text: option.value,
@@ -60,16 +62,7 @@ const ChatBody: FC = () => {
       valueOptions: [],
     });
 
-    if (option.nextId !== false) {
-      const nextSysMessage = systemMessages[option.nextId];
-
-      if (nextSysMessage) {
-        setTimeout(() => {
-          nextSysMessage.timestamp = setUnixTimestamp;
-          addMessage(nextSysMessage);
-        }, 400);
-      }
-    } else {
+    if (!option.nextId) {
       setTimeout(() => {
         addMessage({
           id: messages.length + 1, // Generate unique message ID
@@ -82,17 +75,26 @@ const ChatBody: FC = () => {
           valueType: 'text',
           valueOptions: [],
         })
+        
+        endConversation();
       }, 400);
 
-      endConversation();
+      return; // Don't add any more messages if there's no nextId
+    }
+
+    if (nextSysMessage) {
+      setTimeout(() => {
+        nextSysMessage.timestamp = setUnixTimestamp;
+        addMessage(nextSysMessage);
+      }, 400);
     }
   };
 
   return (
     <div className={styles.chatBody}>      
-      {messages.map((message) => (
+      {messages.map((message, index) => (
         <MessageBubble
-          key={message.id}
+          key={message.id + index} // Ensure unique key by adding index
           message={message}
           onButtonClick={handleButtonClick}
           showOptions={messages.indexOf(message) === messages.length - 1}
