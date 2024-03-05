@@ -1,8 +1,6 @@
-'use client'
-
 import React, { FC } from 'react'
 
-import styles from './chat.module.scss';
+import styles from '../chat.module.scss';
 
 interface Props { }
 

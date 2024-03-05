@@ -1,4 +1,5 @@
-import { FLOW_JSON } from "../lib/endpoints";
+import { FLOW_JSON, API_ROOT } from "../lib/endpoints";
+import { httpClient } from "./client";
 
 /**
  * Fetches data from the API endpoint.
@@ -28,6 +29,10 @@ const fetchData = async (endpoint: any) => {
  */
 const apiService = {
   getChatDefaultMessages: async () => fetchData(FLOW_JSON),
+
+  postConversation: async (conversation: any) => {
+    return httpClient.put(`${API_ROOT}/conversation`, conversation);
+  }
 };
 
 export default apiService;

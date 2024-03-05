@@ -2,10 +2,12 @@
 
 import React, { FC, useState } from 'react'
 
-import styles from './chat.module.scss'
 import ChatHeader from './chat-header.component'
-import ChatBubble from './chat-bubble.component'
+import ChatToggleBubble from './chat-bubble.component'
 import ChatBody from './chat-body.component';
+
+import styles from '../chat.module.scss'
+import ChatTextArea from './chat-textarea.component';
 
 type Props = {}
 
@@ -17,9 +19,10 @@ const Chat: FC = (props: Props) => {
       <div className={styles.chat}>
         <ChatHeader />
         <ChatBody />
+        <ChatTextArea />
       </div>
 
-      <ChatBubble setChatOpen={setChatOpen}/>
+      <ChatToggleBubble setChatOpen={setChatOpen} />
     </div>
   )
 }

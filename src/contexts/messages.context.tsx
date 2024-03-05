@@ -1,32 +1,16 @@
 import apiService from '@/services/service';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-// Define the message structure interface
-export interface Message {
-  id: number;
-  text: string;
-  isUser: boolean;
-  nextId: number | false;
-  uiType: string;
-  valueType: string;
-  valueOptions: [];
-}
-
-// Define the context interface
-interface MessagesContextProps {
-  systemMessages: Message[],
-  messages: Message[];
-  addMessage: (message: Message) => void;
-  endChat: (isComplete: boolean) => void;
-  loading: boolean;
-}
+import {MessagesContextProps, Message, Choice} from '../types/messages.type';
 
 // Create the context
 export const MessagesContext = createContext<MessagesContextProps>({
   systemMessages: [],
   messages: [],
+  choices: [],
   addMessage: () => { },
-  endChat: () => { },
+  addChoice: () => { },
+  endConversation: () => { },
   loading: false,
 });
 
@@ -34,25 +18,30 @@ export const MessagesContext = createContext<MessagesContextProps>({
 const MessageProvider = ({ children }: any) => {
   const [systemMessages, setSystemMessages] = useState<Message[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [conversation, setConversation] = useState<Message[]>([]);
+  const [choices, setChoices] = useState<Choice[]>([]);
   const [loading, setLoading] = useState(false);
 
   const addMessage = (message: Message, isUser: boolean = false) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const wrapConversation = (messages: any) => {
-    messages.forEach((message: Message) => {
-      if (!message.isUser) {
-        setConversation((prevConversation) => [...prevConversation, message]);
-      }
-    });
+  const addChoice = (choice: Choice) => {
+    setChoices((prevChoice) => [...prevChoice, choice]);
   }
 
-  const endChat = (isComplete: boolean) => {
-    if (isComplete) {
-      wrapConversation(messages);
-    }
+  const endConversation = () => {
+    console.log('Choices:', choices);
+    console.log('Messages:', messages);
+    
+    // apiService
+    //   .postConversation(conversation)
+    //   .then((response) => {
+    //     console.log('Conversation posted:', response);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error posting conversation:', error);
+    //   });
+    
   }
 
   useEffect(() => {
@@ -81,8 +70,10 @@ const MessageProvider = ({ children }: any) => {
   const value: MessagesContextProps = {
     systemMessages,
     messages,
+    choices,
     addMessage,
-    endChat,
+    addChoice,
+    endConversation,
     loading,
   };
 

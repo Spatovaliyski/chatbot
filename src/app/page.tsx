@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import Chat from "@/components/Chat/chat.component";
+import Chat from "@/components/Chat/ChatElements/chat.component";
 
 export default function Home() {
   return (

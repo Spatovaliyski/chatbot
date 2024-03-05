@@ -1,7 +1,5 @@
-'use client'
-
 import React from 'react'
-import styles from './chat.module.scss';
+import styles from '../chat.module.scss';
 import { TiMessages } from 'react-icons/ti';
 
 interface Props {

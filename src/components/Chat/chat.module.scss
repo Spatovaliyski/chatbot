@@ -1,3 +1,5 @@
+@import '@/styles/animations.scss';
+
 .chatBubble {
   color: #FFF;
   background-color: #4d9eff;
@@ -62,16 +64,32 @@
   margin-bottom: 1rem;
   font-size: 14px;
 
-  p {
+  .messageText {
     padding: .5rem;
     background-color: #f1f1f1;
     border-radius: 12px;
+    line-height: 1.5;
+  }
+
+  .messageTime {
+    font-size: 12px;
+    color: #888;
+    padding: 0 4px;
+  }
+
+  .messageContainer {
+    animation: fadeIn .2s ease-in;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    gap: .25rem;
   }
 
   .messageOptions {
+    animation: fadeIn .4s ease-in;
     display: flex;
     flex-flow: row wrap;
-    margin: .5rem 0;
+    margin: 1rem 0 0;
     gap: .5rem;
 
     button {
@@ -93,14 +111,62 @@
 
   &.systemMessage {
     display: block;
+    align-self: flex-start;
   }
   
   &.userMessage {
     align-self: flex-end;
     
-    p {
+    .messageText {
       color: #FFF;
       background-color: #4d9eff;
     }
+
+    .messageContainer {
+      align-items: flex-end;
+    }
+  }
+}
+
+.chatTextArea {
+  display: flex;
+  flex-flow: row wrap;
+  gap: .5rem;
+  padding: 1em;
+  border-top: 1px solid #ddd;
+
+  textarea {
+    flex: 1;
+    padding: .5rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    max-height: 48px;
+    min-height: 48px;
+    max-width: 100%;
+    resize: none;
+  }
+
+  button {
+    cursor: pointer;
+    color: white;
+    background: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+
+    &:hover svg {
+      color: black;
+    }
+
+    svg {
+      color: #585858;
+      font-size: 26px;
+    }
+  }
+
+  &.isDisabled {
+    opacity: .5;
+    pointer-events: none;
   }
 }
