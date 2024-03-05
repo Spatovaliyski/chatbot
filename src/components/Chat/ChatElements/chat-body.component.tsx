@@ -5,10 +5,17 @@ import { useTimestamp } from '@/hooks/useTimestamp';
 import styles from '../chat.module.scss';
 import MessageBubble from '../MessageBubble/message-bubble.component';
 
+/**
+ * ChatBody component
+ * 
+ * @returns {JSX.Element} - ChatBody component
+ * @exports ChatBody
+ */
 const ChatBody: FC = () => {
   const { systemMessages, messages, endConversation, addChoice, addMessage } = useContext(MessagesContext);
   const [initiated, setInitiated] = useState(false);
   const setUnixTimestamp = useTimestamp();
+  const chatBodyRef = useRef<HTMLDivElement>(null);
 
   /** 
    * Initialize the chat with the first system message
@@ -90,8 +97,21 @@ const ChatBody: FC = () => {
     }
   };
 
+  /** 
+   * Scroll to the bottom of the chat body when a new message is added
+   * 
+   * @param {Array<Message>} messages - array of messages
+   * @param {HTMLDivElement} chatBodyRef - chatBodyRef - reference to the chat body
+   * 
+  */
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className={styles.chatBody}>      
+    <div className={styles.chatBody} ref={chatBodyRef}>      
       {messages.map((message, index) => (
         <MessageBubble
           key={message.id + index} // Ensure unique key by adding index

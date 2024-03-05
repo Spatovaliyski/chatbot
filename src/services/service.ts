@@ -23,6 +23,7 @@ const fetchData = async (endpoint: any) => {
  * Object containing methods to fetch data from the API.
  * @typedef {Object} apiService
  * @property {Function} getChatDefaultMessages - Fetches the default chat messages.
+ * @property {Function} postConversation - Posts a conversation to the API.
  * 
  * @example
  * const chatDefaultMessages = await apiService.getChatDefaultMessages();

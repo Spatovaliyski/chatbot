@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styles from '../chat.module.scss';
 
 import { IoIosReturnLeft } from "react-icons/io";
@@ -13,7 +13,7 @@ interface Props {}
  * @returns {JSX.Element} - ChatTextArea component
  * @exports ChatTextArea
  */
-const ChatTextArea = (props: Props) => {
+const ChatTextArea:FC = (props: Props) => {
   return (
     <div className={`${styles.chatTextArea} ${styles.isDisabled}`}>
       <textarea></textarea>

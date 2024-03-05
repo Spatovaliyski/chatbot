@@ -2,9 +2,17 @@ import { MessageBubbleProps } from './message-bubble.type';
 
 import styles from '../chat.module.scss';
 
+/** 
+ * MessageBubble component / Individual chat message
+ * 
+ * @param {MessageBubbleProps} props - component props
+ * @returns {JSX.Element} - MessageBubble component
+ * 
+ * @exports MessageBubble
+ */
 const MessageBubble = ({ message, onButtonClick, showOptions }: MessageBubbleProps) => {
-  const isSystemMessage = !message.isUser;
-  const convertedTime = new Date(message.timestamp * 1000).toLocaleString('en-GB', { hour: 'numeric', minute: 'numeric' });
+  const isSystemMessage = !message.isUser; // Check if the message is a system message
+  const convertedTime = new Date(message.timestamp * 1000).toLocaleString('en-GB', { hour: 'numeric', minute: 'numeric' }); // Convert timestamp to human-readable time
 
   return (
     <div className={`${styles.chatMessage} ${isSystemMessage ? styles.systemMessage : styles.userMessage}`}>

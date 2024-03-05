@@ -1,8 +1,14 @@
 @import '@/styles/animations.scss';
 
+.chat {
+  transform-origin: top;
+  animation: fadeIn .2s ease-in;
+  border: 1px solid var(--color-light-gray);
+}
+
 .chatBubble {
-  color: #FFF;
-  background-color: #4d9eff;
+  color: var(--color-light);
+  background-color: var(--color-main);
   display: flex;
   border-radius: 50%;
   padding: 1.5rem;
@@ -25,7 +31,7 @@
   right: 2em;
   max-width: 300px;
   width: 100%;
-  background-color: white;
+  background-color: var(--color-light);
   border-radius: .5em;
   overflow: hidden;
   box-shadow: 0 0 26px -18px rgba(0, 0, 0, 0.5);
@@ -34,15 +40,15 @@
     padding: 1em;
     min-height: 260px;
     max-height: 260px;
-    overflow: auto;
+    overflow-y: auto;
     width: 100%;
     display: flex;
     flex-flow: column;
   }
 
   .chatHeader {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    background-color: var(--color-light);
+    border-bottom: 1px solid var(--color-gray);
     padding: 1em;
     display: flex;
     justify-content: space-between;
@@ -54,7 +60,7 @@
 
     .closeButton {
       cursor: pointer;
-      color: #4d9eff;
+      color: var(--color-main);
       font-size: 1.5em;
     }
   }
@@ -63,17 +69,35 @@
 .chatMessage {
   margin-bottom: 1rem;
   font-size: 14px;
+  display: flex;
+  flex-flow: column;
+
+  &.systemMessage {
+  }
+  
+  &.userMessage {
+    align-self: flex-end;
+    
+    .messageText {
+      color:var(--color-light);
+      background-color: var(--color-chat-user);
+    }
+
+    .messageContainer {
+      align-items: flex-end;
+    }
+  }
 
   .messageText {
     padding: .5rem;
-    background-color: #f1f1f1;
+    background-color: var(--color-light-gray);
     border-radius: 12px;
     line-height: 1.5;
   }
 
   .messageTime {
     font-size: 12px;
-    color: #888;
+    color: var(--color-dark-gray);
     padding: 0 4px;
   }
 
@@ -88,42 +112,24 @@
   .messageOptions {
     animation: fadeIn .4s ease-in;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column;
     margin: 1rem 0 0;
     gap: .5rem;
 
     button {
       cursor: pointer;
-      background-color: #565656;
+      background-color: var(--color-chat-choice);
       min-width: 60px;
-      color: white;
+      color: var(--color-light);
       border: none;
       display: block;
       padding: .5rem;
       border-radius: 10px;
 
       &:hover {
-        background-color: #313431;
+        background-color: var(--color-chat-choice-hover);
       
       }
-    }
-  }
-
-  &.systemMessage {
-    display: block;
-    align-self: flex-start;
-  }
-  
-  &.userMessage {
-    align-self: flex-end;
-    
-    .messageText {
-      color: #FFF;
-      background-color: #4d9eff;
-    }
-
-    .messageContainer {
-      align-items: flex-end;
     }
   }
 }
@@ -133,13 +139,13 @@
   flex-flow: row wrap;
   gap: .5rem;
   padding: 1em;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-gray);
 
   textarea {
     flex: 1;
     padding: .5rem;
     border-radius: 6px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-gray);
     max-height: 48px;
     min-height: 48px;
     max-width: 100%;
@@ -148,20 +154,20 @@
 
   button {
     cursor: pointer;
-    color: white;
+    color: var(--color-light);
     background: none;
     border: none;
     padding: .5rem 1rem;
     border-radius: 6px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-gray);
 
     &:hover svg {
       color: black;
     }
 
     svg {
-      color: #585858;
-      font-size: 26px;
+      color: var(--color-dark-gray);
+      font-size: 24px;
     }
   }
 
