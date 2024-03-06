@@ -65,6 +65,7 @@ const MessageProvider = ({ children }: any) => {
 
   /**
    * Post conversation to the API
+   * We're checkiong @param conversation instead of @param choices as a finalised state of the conversation
    * 
    * @param {boolean} conversation - The conversation to post
    *
@@ -80,7 +81,7 @@ const MessageProvider = ({ children }: any) => {
           console.error('Error posting conversation:', error); // Only for testing purposes
         });
     }
-  }, [conversation]);
+  }, [conversation]); //eslint-disable-line react-hooks/exhaustive-deps
 
   /** 
    * Fetch chat default messages

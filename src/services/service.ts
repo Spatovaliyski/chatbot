@@ -1,3 +1,4 @@
+import { Choice } from "@/types/messages.type";
 import { FLOW_JSON, API_ROOT } from "../lib/endpoints";
 import { httpClient } from "./client";
 
@@ -31,7 +32,7 @@ const fetchData = async (endpoint: any) => {
 const apiService = {
   getChatDefaultMessages: async () => fetchData(FLOW_JSON),
 
-  postConversation: async (conversation: any) => {
+  postConversation: async (conversation: Choice[]) => {
     return httpClient.put(`${API_ROOT}/conversation`, conversation);
   }
 };

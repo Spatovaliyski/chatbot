@@ -38,7 +38,7 @@ const ChatBody: FC = () => {
         setInitiated(true)
       }
     }
-  }, [systemMessages, addMessage, initiated]);
+  }, [systemMessages, addMessage, initiated]); //eslint-disable-line react-hooks/exhaustive-deps
 
   /** 
    * Handle button click
@@ -114,7 +114,7 @@ const ChatBody: FC = () => {
     <div className={styles.chatBody} ref={chatBodyRef}>      
       {messages.map((message, index) => (
         <MessageBubble
-          key={message.id + index} // Ensure unique key by adding index
+          key={message.id + index}
           message={message}
           onButtonClick={handleButtonClick}
           showOptions={messages.indexOf(message) === messages.length - 1}
